@@ -1,0 +1,70 @@
+<div class="flex w-full justify-between">
+  <div class="flex">
+    <div class="flex justify-center items-center mr-[16px]">
+      <a [routerLink]="['/admin/ticket-reports']"
+        ><lucide-icon name="chevron-left" color="#006885"></lucide-icon
+      ></a>
+    </div>
+    <app-page-header text="Detail Ticket Report" />
+  </div>
+  @if (name !== '') {
+  <div class="flex items-center gap-2 justify-end">
+    <p class="text-green500Primary font-semibold">{{ name }}</p>
+    <lucide-icon
+      name="circle-user-round"
+      size="32"
+      color="#006885"
+    ></lucide-icon>
+  </div>
+  }
+</div>
+
+<div class="flex flex-col xl:flex-row gap-[16px] mt-[42px]">
+  @if (isLoading$ | async) {
+  <app-loading />
+  } @else {
+  <app-card customClass="w-[412px] py-[38px]">
+    <div class="flex-row justify-center items-center">
+      <div class="flex justify-center items-center">
+        <img
+          src="../../../../assets/profilePicture.png"
+          alt="Profile Picture"
+          width="153"
+        />
+      </div>
+      <div>
+        @for (item of data; track $index) {
+        <app-detail-info [data]="item"></app-detail-info>
+        }
+      </div>
+    </div>
+  </app-card>
+  <div>
+    <app-card customClass="w-[661px] h-[512px] mb-[16px] overflow-y-auto">
+      @if (trackStatusData.result) {
+      <app-steps [stepsData]="trackStatusData.result" [numOfSteps]="5" />
+      }
+    </app-card>
+    <app-card customClass="w-[661px] h-[322px] p-[38px]">
+      <div>
+        <p class="text-green500Primary font-semibold text-[18px] mb-[10px]">
+          Feedback Pelapor
+        </p>
+      </div>
+      @if (feedbackData.result && !(isLoading$ |async)) {
+
+      <div class="mb-[25px] mt-[25px]">
+        <app-ratings [rating]="feedbackData.result.rating"></app-ratings>
+      </div>
+      <div
+        class="border border-slate-300 rounded-[12px] p-[15px] w-[586px] h-[160px] flex items-start overflow-auto"
+      >
+        <p class="text-[#858585]">
+          {{ !feedbackData.result.comment ? "" : feedbackData.result.comment }}
+        </p>
+      </div>
+      }
+    </app-card>
+  </div>
+  }
+</div>

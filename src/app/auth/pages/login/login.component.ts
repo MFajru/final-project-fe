@@ -1,22 +1,23 @@
 import { Component } from '@angular/core';
 import { DynamicFormComponent } from '../../../shared/components/dynamic-form/dynamic-form.component';
-import { IInputField } from '../../../shared/types/input-field';
+import { IInputField } from '../../../shared/types/inputField';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgClass } from '@angular/common';
-import { Router } from '@angular/router';
+import { AsyncPipe, NgClass } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
+import { NgxSonnerToaster } from 'ngx-sonner';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [DynamicFormComponent, NgClass],
+  imports: [DynamicFormComponent, NgClass, NgxSonnerToaster, AsyncPipe],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
   form!: FormGroup;
-  constructor(fb: FormBuilder, private router: Router) {
+  constructor(fb: FormBuilder, protected authService: AuthService) {
     this.form = fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      username: ['', [Validators.required, Validators.minLength(6)]],
       password: ['', [Validators.required, Validators.minLength(8)]],
     });
   }
@@ -24,11 +25,11 @@ export class LoginComponent {
   fields: IInputField[] = [
     {
       inputType: 'text',
-      inputName: 'email',
-      fcName: 'email',
-      inputId: 'email',
+      inputName: 'username',
+      fcName: 'username',
+      inputId: 'username',
       errText: '',
-      placeholder: 'Email',
+      placeholder: 'Username',
     },
     {
       inputType: 'password',
@@ -40,8 +41,8 @@ export class LoginComponent {
     },
   ];
 
-  get email() {
-    return this.form.get('email');
+  get username() {
+    return this.form.get('username');
   }
 
   get password() {
@@ -49,20 +50,32 @@ export class LoginComponent {
   }
 
   onSubmit() {
-    if (this.email && this.email.invalid) {
-      this.fields[0].errText = 'Invalid email format.';
+    if (this.username && this.username.invalid && this.username.errors) {
+      if (this.username.errors['required']) {
+        this.fields[0].errText = 'Username must be filled.';
+      } else {
+        this.fields[0].errText =
+          'Username must have a minimum length of 6 characters.';
+      }
     }
-    if (this.password && this.password.invalid) {
-      this.fields[1].errText =
-        'Password must has have a minimum length of 8 characters.';
+    if (this.password && this.password.invalid && this.password.errors) {
+      if (this.password.errors['required']) {
+        this.fields[1].errText = 'Password must be filled.';
+      } else {
+        this.fields[1].errText =
+          'Password must have a minimum length of 8 characters.';
+      }
     }
     if (
-      this.email &&
+      this.username &&
       this.password &&
-      this.email.valid &&
+      this.username.valid &&
       this.password.valid
     ) {
-      this.router.navigate(['/admin/dashboard']);
+      this.authService.login({
+        username: this.username.value,
+        password: this.password.value,
+      });
     }
   }
 }

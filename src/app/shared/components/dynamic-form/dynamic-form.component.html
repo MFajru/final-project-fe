@@ -1,19 +1,24 @@
 <form (submit)="mySubmit($event)" class="w-full flex flex-col gap-5">
   @if (formFields.length !== 0) { @for (field of formFields; track $index) {
-  <app-input-field
-    [inputType]="field.inputType"
-    [inputLabel]="field.inputLabel"
-    [inputName]="field.inputName"
-    [inputId]="field.inputId"
-    [errText]="field.errText"
-    [customStyle]="field.customStyle"
-    [placeholder]="field.placeholder"
-    [choices]="field.choices"
-    [fGroup]="fGroup"
-    [fcName]="field.fcName"
-  ></app-input-field>
+  <div class="mb-4">
+    <app-input-field
+      [inputType]="field.inputType"
+      [inputLabel]="field.inputLabel"
+      [inputName]="field.inputName"
+      [inputId]="field.inputId"
+      [errText]="field.errText"
+      [customStyle]="field.customStyle"
+      [placeholder]="field.placeholder"
+      [choices]="field.choices"
+      [fGroup]="fGroup"
+      [fcName]="field.fcName"
+    ></app-input-field>
+  </div>
   } }
-  <app-button [customStyle]="btnStyle" type="submit">{{
-    buttonLabel
-  }}</app-button>
+  <app-button
+    [customStyle]="btnStyle"
+    type="submit"
+    [isDisabled]="isButtonDisabled"
+    >{{ buttonLabel }}</app-button
+  >
 </form>

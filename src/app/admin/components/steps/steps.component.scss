@@ -1,0 +1,18 @@
+.steps .step-custom + .step-custom:before {
+  background-color: hsl(187, 100%, 36%);
+}
+
+.steps .step-custom:after {
+  background-color: hsl(187, 100%, 92%);
+  color: hsl(187, 100%, 36%);
+}
+
+.steps .step-custom-disable + .step-custom-disable:before {
+  /* custom background color */
+  background-color: hsl(0, 0%, 92%);
+}
+
+.steps .step-custom-disable:after {
+  background-color: hsl(0, 0%, 92%);
+  color: hsl(0, 0%, 64%);
+}

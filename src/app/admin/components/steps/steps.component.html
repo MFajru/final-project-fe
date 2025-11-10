@@ -1,0 +1,51 @@
+<div class="sticky top-0 bg-white px-[38px] pt-[38px] pb-[10px] z-50">
+  <p class="text-green500Primary font-semibold text-[18px]">Status Laporan</p>
+</div>
+<div class="mx-[36px] mb-[36px]">
+  <ul class="steps steps-vertical">
+    @for (item of stepsData; let idx = $index; track idx ) { @if (item) {
+
+    <li
+      data-content="●"
+      class="step"
+      [ngClass]="item.pic && item.date ? 'step-custom' : 'step-custom-disable'"
+    >
+      <div class="text-start ml-[36px] py-6">
+        <p
+          class="text-[16px] font-medium"
+          [ngClass]="
+            item.pic && item.date ? 'text-green500Primary' : 'text-[#C2C2C2]'
+          "
+        >
+          {{ item.description | toTitleCase }}
+        </p>
+        <p
+          class="text-[14px]"
+          [ngClass]="
+            item.pic && item.date ? 'text-[#666666]' : 'text-[#C2C2C2]'
+          "
+        >
+          {{ descInfo[idx] }}:
+          {{
+            idx === 0
+              ? (item.category | toTitleCase)
+              : !item.pic
+              ? "-"
+              : (item.pic | toTitleCase)
+          }}
+        </p>
+        <p
+          class="text-[14px]"
+          [ngClass]="
+            item.pic && item.date ? 'text-[#666666]' : 'text-[#C2C2C2]'
+          "
+        >
+          {{
+            !item.date ? "-" : (item.date | formatDate : "DD MMM YYYY HH:MM:SS")
+          }}
+        </p>
+      </div>
+    </li>
+    } }
+  </ul>
+</div>
